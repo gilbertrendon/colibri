@@ -1,0 +1,1 @@
+Jelpit: Hola, es un gusto atenderlo hoy. Su servicio de [Task.TaskType.NameClean] con Numero OT: [Task.NumeroOT], será prestado en [Task.PrincipalAsset.Name], por concepto de [Task.Inquietudservicio] y será atendido por [Task.AssignedEngineer.NameClean] entre [Task.AssignmentStart] y [Task.VentanaServicio]. Para hacer seguimiento a su servicio ingrese aquí: {[url]}.

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document id="1Fe_ESxShWJAURHYfR5kDtKfWh_Ysqq9n">
+	<name>Ejemplo Territory Planning ClickS</name>
+	<gx:CascadingStyle kml:id="__managed_style_0CD21A259F27C926DB81">
+		<Style>
+			<IconStyle>
+				<scale>1.2</scale>
+				<Icon>
+					<href>https://earth.google.com/earth/rpc/cc/icon?color=1976d2&amp;id=2000&amp;scale=4</href>
+				</Icon>
+				<hotSpot x="64" y="128" xunits="pixels" yunits="insetPixels"/>
+			</IconStyle>
+			<LabelStyle>
+			</LabelStyle>
+			<LineStyle>
+				<color>ff2dc0fb</color>
+				<width>4.8</width>
+			</LineStyle>
+			<PolyStyle>
+				<color>40ffffff</color>
+			</PolyStyle>
+			<BalloonStyle>
+			</BalloonStyle>
+		</Style>
+	</gx:CascadingStyle>
+	<gx:CascadingStyle kml:id="__managed_style_17526E756727C926DB7F">
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>https://earth.google.com/earth/rpc/cc/icon?color=1976d2&amp;id=2000&amp;scale=4</href>
+				</Icon>
+				<hotSpot x="64" y="128" xunits="pixels" yunits="insetPixels"/>
+			</IconStyle>
+			<LabelStyle>
+			</LabelStyle>
+			<LineStyle>
+				<color>ff2dc0fb</color>
+				<width>3.2</width>
+			</LineStyle>
+			<PolyStyle>
+				<color>40ffffff</color>
+			</PolyStyle>
+			<BalloonStyle>
+			</BalloonStyle>
+		</Style>
+	</gx:CascadingStyle>
+	<StyleMap id="__managed_style_03A7BD5B9A27C926DB7F">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#__managed_style_17526E756727C926DB7F</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#__managed_style_0CD21A259F27C926DB81</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Placemark id="0367A4E9D5274DB6CF1E">
+		<name>Poligono COIT</name>
+		<LookAt>
+			<longitude>-75.58161113517946</longitude>
+			<latitude>6.256876767335587</latitude>
+			<altitude>1470.626903400465</altitude>
+			<heading>208.4089044557131</heading>
+			<tilt>0</tilt>
+			<gx:fovy>35</gx:fovy>
+			<range>1826.498850615754</range>
+			<altitudeMode>absolute</altitudeMode>
+		</LookAt>
+		<styleUrl>#__managed_style_03A7BD5B9A27C926DB7F</styleUrl>
+		<Polygon>
+			<outerBoundaryIs>
+				<LinearRing>
+					<coordinates>
+						-75.5818215638562,6.2546332796983,1469.73824340592 -75.58019187932042,6.255216571392928,1467.491674119944 -75.57913675731793,6.257133965708469,1467.901228795282 -75.58142585655681,6.259271289750605,1472.18999057099 -75.58320147976215,6.259423208609043,1478.97297139878 -75.58494640752762,6.257841026024418,1475.539930645817 -75.58570696674084,6.256442889654269,1475.635587959579 -75.58492330396524,6.255269769087055,1473.943021215422 -75.58347121609894,6.254403133836933,1469.740058320595 -75.5818215638562,6.2546332796983,1469.73824340592 
+					</coordinates>
+				</LinearRing>
+			</outerBoundaryIs>
+		</Polygon>
+	</Placemark>
+	<Placemark id="0DCB916FBE274DB81CC6">
+		<name>Poligono COIT 2</name>
+		<LookAt>
+			<longitude>-75.58761507170102</longitude>
+			<latitude>6.262760536327832</latitude>
+			<altitude>1487.159110313135</altitude>
+			<heading>208.40840787461</heading>
+			<tilt>0</tilt>
+			<gx:fovy>35</gx:fovy>
+			<range>5717.896703341976</range>
+			<altitudeMode>absolute</altitudeMode>
+		</LookAt>
+		<styleUrl>#__managed_style_03A7BD5B9A27C926DB7F</styleUrl>
+		<Polygon>
+			<outerBoundaryIs>
+				<LinearRing>
+					<coordinates>
+						-75.59313797926984,6.258115342380566,1484.883917986353 -75.59198390873263,6.258971123650364,1484.974712183121 -75.59189378285465,6.260750858711977,1488.163876757314 -75.59340770201115,6.262250544261444,1492.047147862432 -75.5969413520472,6.263200702249791,1493.768858105029 -75.59727067842702,6.261390921825821,1489.920074666532 -75.5974718465197,6.259220782459397,1489.465890069369 -75.59313797926984,6.258115342380566,1484.883917986353 
+					</coordinates>
+				</LinearRing>
+			</outerBoundaryIs>
+		</Polygon>
+	</Placemark>
+</Document>
+</kml>

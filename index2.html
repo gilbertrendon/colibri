@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<div ng-controller="ServiceAlertFormController">
+  <div ng-controller="ServiceAlertFormController" ng-init="init();">
+    <label style="font-weight: bold">NOVEDAD EN EL SERVICIO</label>
+  </div>
+  <div id="divLocationsCombo" ng-show="showLocationsCombo">
+    <label style="font-weight: bold">CONTENIDO - {{mensaje}}</label>
+  </div>
+
+  <div>
+    <select ng-model="Nambre" ng-options="opcio[Title] for opcio in nextServiceAlertKey"></select>
+    <div>{{a}}</div>
+    <!-- <select ng-model = 'Nombreeeeee' ng-options='opcion for opcion in Opciones'> </select> -->
+
+    <!--*ngFor="let opcion of Opciones; index as i; first as isFirst"> ng-options='opcion for opcion in Opciones'-->
+    <!-- <table >
+    <tr *ngFor="let t of arreglo">
+        <th>{{t}}</th>
+    </tr>
+    </table> -->
+  </div>
+</div>
