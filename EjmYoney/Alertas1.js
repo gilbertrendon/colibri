@@ -37,11 +37,39 @@ define(["modules/platform/platformModule"], function () {
           done: false,
         },
       ];
+
+      $scope.Opciones = [
+        {
+          Key: 1199446016,
+          Name: "New",
+        },
+        {
+          Key: 1199446017,
+          Name: "Acknowledge",
+        },
+        {
+          Key: 1199446018,
+          Name: "Not Relevant",
+        },
+        {
+          Key: 857653251,
+          Name: "Pending",
+        },
+        {
+          Key: 857653252,
+          Name: "Accepted",
+        },
+        {
+          Key: 857653253,
+          Name: "Closed",
+        },
+      ];
+      $scope.LastServiceAlert = [];
       $scope.ServiceAlertKeys = [];
       $scope.mensaje = "msg";
       $scope.showLocationsCombo = true;
       $scope.textoUno = "";
-      $scope.Opciones = ["Accepted", "Not Relevant", "Closed"];
+      // $scope.Opciones = ["Accepted", "Not Relevant", "Closed"];
       // $scope.arreglo_test = Alerta[Alerta];
       $scope.arreglo = [];
       $scope.items1_1 = [{ a: "bien" }, { b: "mal" }];
@@ -69,8 +97,6 @@ define(["modules/platform/platformModule"], function () {
       await reqServiceAlerts.$promise.then(
         async function (ServiceAlertData) {
           $scope.ServiceAlertKeys = ServiceAlertData;
-          console.log("*************************************");
-          console.log($scope.ServiceAlertKeys);
           var ServiceAlertForUpdateQuery = {};
           var nextServiceAlertKey;
           if ($scope.ServiceAlertKeys !== null) {
@@ -107,10 +133,10 @@ define(["modules/platform/platformModule"], function () {
                 }
               );
             }
-            console.log("________________________________________");
-            console.log($scope.ServiceAlertKeys[0]);
+            $scope.LastServiceAlert = $scope.ServiceAlertKeys[$scope.ServiceAlertKeys.length -1];
+            console.log("*********************************************");
+            console.log($scope.LastServiceAlert);
           }
-          // return $scope.ServiceAlertKeys;
         },
         function (error) {
           alert(

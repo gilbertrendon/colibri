@@ -30,28 +30,49 @@
         <td>small rubber</td>
       </tr>
     </table> -->
-    <select ng-model="Alerta" ng-options="alert for alert in arreglo"></select>
+    <!-- <select ng-model="Alerta" ng-options="alert for alert in arreglo"></select>
     <select
       ng-model="Estado"
       ng-options="opcion for opcion in Opciones"
-    ></select>
+    ></select> -->
     <!-- <div>{{Opciones[0]}}</div> -->
-    <div>{{ServiceAlertKeys}}</div>
+    <!-- <div>{{ServiceAlertKeys[0]}}</div> -->
     <table>
       <thead>
         <tr>
-          <th>#</th>
-          <th>Title</th>
-          <th>Description</th>
-          <th>Done?</th>
+          <th>Creation date</th>
+          <th>Management date</th>
+          <th>Alert tipe</th>
+          <th>Managed by</th>
+          <th>Detail</th>
+          <th>Comentarios</th>
+          <th>Estado</th>
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="todo in todos">
-          <td>{{todo.id}}</td>
-          <td>{{todo.title}}</td>
-          <td>{{todo.description}}</td>
-          <td>{{todo.done}}</td>
+        <tr ng-repeat="alert in ServiceAlertKeys">
+          <td>{{alert.Stamp.TimeCreated}}</td>
+          <td>{{alert.Stamp.TimeModified}}</td>
+          <td>{{alert.ServiceAlertType['@DisplayString']}}</td>
+          <td>{{alert.FollowUpUser}}</td>
+          <td>{{alert.Description}}</td>
+          <td>{{alert.Title}}</td>
+          <td>{{alert.ServiceAlertStatus['@DisplayString']}}</td>
+        </tr>
+        <tr>
+          <td>{{LastServiceAlert.Stamp.TimeCreated}}</td>
+          <td>{{LastServiceAlert.Stamp.TimeModified}}</td>
+          <td>{{LastServiceAlert.ServiceAlertType['@DisplayString']}}</td>
+          <td>{{LastServiceAlert.FollowUpUser}}</td>
+          <td>{{LastServiceAlert.Description}}</td>
+          <td>{{LastServiceAlert.Title}}</td>
+          <!-- <td>{{LastServiceAlert.Title}}</td> -->
+          <td>
+            <select
+              ng-model="alert"
+              ng-options="opcion.Name for opcion in Opciones"
+            ></select>
+          </td>
         </tr>
       </tbody>
     </table>
