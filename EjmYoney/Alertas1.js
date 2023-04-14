@@ -1,4 +1,24 @@
 define(["modules/platform/platformModule"], function () {
+  var todos = [];
+  var Opciones = [];
+  var LastServiceAlert = [];
+  var data = {};
+  var ServiceAlertKeys = [];
+  var mensaje = "";
+  var showLocationsCombo = true;
+  var textoUno = "";
+  var rreglo = [];
+  var items1_1 = [{ a: "bien" }, { b: "mal" }];
+  var items1_2 = [{ c: "bien" }, { d: "mal" }];
+  var items1 = [{ a: "bien" }, { b: "mal" }];
+  var TaskKey = "";
+  var TaskCallID = "";
+  var serviceAlerts = {
+    TaskCallID: "",
+    TaskKey: "",
+    TasKNumber: "",
+  };
+
   angular.module("platformModule").controller("ServiceAlertFormController", [
     "$scope",
     "w6serverServices",
@@ -69,8 +89,6 @@ define(["modules/platform/platformModule"], function () {
       $scope.mensaje = "msg";
       $scope.showLocationsCombo = true;
       $scope.textoUno = "";
-      // $scope.Opciones = ["Accepted", "Not Relevant", "Closed"];
-      // $scope.arreglo_test = Alerta[Alerta];
       $scope.arreglo = [];
       $scope.items1_1 = [{ a: "bien" }, { b: "mal" }];
       $scope.items1_2 = [{ c: "bien" }, { d: "mal" }];
@@ -101,10 +119,8 @@ define(["modules/platform/platformModule"], function () {
           var nextServiceAlertKey;
           if ($scope.ServiceAlertKeys !== null) {
             for (var j = 0; j < $scope.ServiceAlertKeys.length; j++) {
-              // alertas.push($scope.ServiceAlertKeys[j]["Title"]);
               $scope.arreglo.push($scope.ServiceAlertKeys[j]["Title"]);
               nextServiceAlertKey = $scope.ServiceAlertKeys[j].Key;
-              //Falta cambiar el service alert status para mostrarlo en la vista dependiendo del que tenga la alerta
               ServiceAlertForUpdateQuery = {
                 "@objectType": "ServiceAlert",
                 Key: nextServiceAlertKey,
@@ -133,9 +149,13 @@ define(["modules/platform/platformModule"], function () {
                 }
               );
             }
-            $scope.LastServiceAlert = $scope.ServiceAlertKeys[$scope.ServiceAlertKeys.length -1];
+            $scope.LastServiceAlert =
+              $scope.ServiceAlertKeys[$scope.ServiceAlertKeys.length - 1];
             console.log("*********************************************");
             console.log($scope.LastServiceAlert);
+            // LastServiceAlert = $scope.LastServiceAlert;
+            // data.ServiceAlert =
+            //   LastServiceAlert[$scope.ServiceAlertKeys.length - 1]["Title"];
           }
         },
         function (error) {
@@ -146,6 +166,12 @@ define(["modules/platform/platformModule"], function () {
           return error;
         }
       );
+      $scope.updating = function () {
+        alert(
+          "Failed to update object. Error information: " +
+            "sdfasdfasdffsd"
+        );
+      };
     },
   ]);
 });

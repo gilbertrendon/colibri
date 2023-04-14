@@ -7,37 +7,7 @@
     <label style="font-weight: bold">CONTENIDO - {{mensaje}}</label>
   </div>
   <div>
-    <!-- <table>
-      <tr>
-        <td><h1>pencils</h1></td>
-      </tr>
-      <tr>
-        <td>red pencil</td>
-      </tr>
-      <tr>
-        <td>blue pencil</td>
-      </tr>
-      <tr>
-        <td>yellow pencil</td>
-      </tr>
-      <tr>
-        <td><h1>rubbers</h1></td>
-      </tr>
-      <tr>
-        <td>big rubber</td>
-      </tr>
-      <tr>
-        <td>small rubber</td>
-      </tr>
-    </table> -->
-    <!-- <select ng-model="Alerta" ng-options="alert for alert in arreglo"></select>
-    <select
-      ng-model="Estado"
-      ng-options="opcion for opcion in Opciones"
-    ></select> -->
-    <!-- <div>{{Opciones[0]}}</div> -->
-    <!-- <div>{{ServiceAlertKeys[0]}}</div> -->
-    <table>
+    <table class="table">
       <thead>
         <tr>
           <th>Creation date</th>
@@ -61,31 +31,79 @@
         </tr>
         <tr>
           <td>{{LastServiceAlert.Stamp.TimeCreated}}</td>
-          <td>{{LastServiceAlert.Stamp.TimeModified}}</td>
+          <td>
+            <pp-datetime
+              show-date="true"
+              show-time="true"
+              ng-model="LastServiceAlert.Stamp.TimeModified"
+              property-name="FinishDate"
+              focus-id="1"
+              read-only="false"
+              mandatory="false"
+              default-value=""
+            ></pp-datetime>
+          </td>
           <td>{{LastServiceAlert.ServiceAlertType['@DisplayString']}}</td>
-          <td>{{LastServiceAlert.FollowUpUser}}</td>
-          <td>{{LastServiceAlert.Description}}</td>
-          <td>{{LastServiceAlert.Title}}</td>
-          <!-- <td>{{LastServiceAlert.Title}}</td> -->
+          <td>
+            <textarea
+              rows="1"
+              cols="20"
+              name="comment"
+              ng-model="LastServiceAlert.FollowUpUser"
+            >
+          {{LastServiceAlert.FollowUpUser}}</textarea
+            >
+          </td>
+          <td>
+            <br />
+            <select
+              ng-model="LastServiceAlert.Description"
+              style="
+                border: 1px solid #cbcbcb;
+                border-radius: 2px;
+                min-height: 38px;
+                font-size: 14px;
+                margin-top: 5px;
+                background-color: #ffffff;
+                color: #222222;
+                width: 160px;
+                padding: 4px 10px;
+              "
+              class="form-control"
+            >
+              <option>Novedad Gestionada</option>
+              <option>Novedad no requiere gestion</option>
+            </select>
+            <br />
+          </td>
+          <td>
+            <textarea
+              rows="4"
+              cols="30"
+              name="comment"
+              ng-model="LastServiceAlert.Title"
+            >
+          {{LastServiceAlert.Title}}</textarea
+            >
+          </td>
           <td>
             <select
-              ng-model="alert"
+              ng-model="LastServiceAlert.ServiceAlertStatus['@DisplayString']"
               ng-options="opcion.Name for opcion in Opciones"
             ></select>
           </td>
         </tr>
       </tbody>
     </table>
-    <!-- <div>{{ServiceAlertKeys}}</div> -->
-
-    <!-- <ul *ngFor="let person of gilbertor">
-      <li>Nombre: {{person.firstname}}</li>
-      <li>Apellido: {{person.lastname}}</li>
-      <li>Edad: {{person.age}}</li>
-    </ul> -->
-    <!-- <div>{{ info }}</div> -->
-    <!-- <select ng-model = 'Nombreeeeee' ng-options='opcion for opcion in Opciones'> </select> -->
-
-    <!--*ngFor="let opcion of Opciones; index as i; first as isFirst"> ng-options='opcion for opcion in Opciones'-->
+    <div>
+      <div>
+        <p>Update element in array</p>
+        <input
+          type="button"
+          value="Actualizar alerta"
+          ng-click="updating()"
+        />
+      </div>
+    </div>
   </div>
 </div>
