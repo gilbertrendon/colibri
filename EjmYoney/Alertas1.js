@@ -113,47 +113,19 @@ define(["modules/platform/platformModule"], function () {
         true
       );
       await reqServiceAlerts.$promise.then(
-        async function (ServiceAlertData) {
+        function (ServiceAlertData) {
+          data = ServiceAlertData;
           $scope.ServiceAlertKeys = ServiceAlertData;
-          var ServiceAlertForUpdateQuery = {};
-          var nextServiceAlertKey;
+
           if ($scope.ServiceAlertKeys !== null) {
             for (var j = 0; j < $scope.ServiceAlertKeys.length; j++) {
               $scope.arreglo.push($scope.ServiceAlertKeys[j]["Title"]);
-              nextServiceAlertKey = $scope.ServiceAlertKeys[j].Key;
-              ServiceAlertForUpdateQuery = {
-                "@objectType": "ServiceAlert",
-                Key: nextServiceAlertKey,
-                ServiceAlertStatus: {
-                  Name: "Not Relevant", //$scope.ServiceAlertKeys[j].ServiceAlertStatus.@DisplayString
-                },
-              };
-
-              var resultUpdateSAStatus = w6serverServices.updateObject(
-                "ServiceAlert",
-                ServiceAlertForUpdateQuery,
-                false
-              );
-              await resultUpdateSAStatus.$promise.then(
-                function (data) {
-                  console.log(
-                    "Se actualizo el estado del service alert " + data
-                  );
-                },
-                function (error) {
-                  console.log("Info data error", error);
-                  // alert(
-                  //   "Failed to update object. Error information: " +
-                  //     error.data.ExceptionMessage
-                  // );
-                }
-              );
             }
             $scope.LastServiceAlert =
               $scope.ServiceAlertKeys[$scope.ServiceAlertKeys.length - 1];
             console.log("*********************************************");
             console.log($scope.LastServiceAlert);
-            // LastServiceAlert = $scope.LastServiceAlert;
+            LastServiceAlert = $scope.LastServiceAlert;
             // data.ServiceAlert =
             //   LastServiceAlert[$scope.ServiceAlertKeys.length - 1]["Title"];
           }
@@ -166,11 +138,58 @@ define(["modules/platform/platformModule"], function () {
           return error;
         }
       );
-      $scope.updating = function () {
-        alert(
-          "Failed to update object. Error information: " +
-            "sdfasdfasdffsd"
+      $scope.updating = async function (
+        UpTimeModified,
+        UserManag,
+        Detail,
+        Coment,
+        State
+      ) {
+        // alert(
+        //   "management date:" + UpTimeModified+
+        //   "management date:" + UserManag+
+        //   "management date:" + Detail+
+        //   "management date:" + Coment+
+        //   "management date:" + State
+
+        // );
+        var ServiceAlertForUpdateQuery = {};
+        var nextServiceAlertKey;
+        nextServiceAlertKey = LastServiceAlert["Key"];
+        ServiceAlertForUpdateQuery = {
+          "@objectType": "ServiceAlert",
+          Key: nextServiceAlertKey,
+          Stamp: {
+            TimeModified: UpTimeModified,
+          },
+          ServiceAlertStatus: {
+            Name: State["Name"],
+          },
+          FollowUpUser: UserManag,
+          Description: Detail,
+          Title: Coment,
+        };
+
+        var resultUpdateSAStatus = w6serverServices.updateObject(
+          "ServiceAlert",
+          ServiceAlertForUpdateQuery,
+          false
         );
+        await resultUpdateSAStatus.$promise.then(
+          function (data) {
+            alert(
+              "Se actualizo el estado del service alert " +
+              data
+            );
+          },
+          function (error) {
+            alert(
+              "Failed to update object. Error information: " +
+                error.data.ExceptionMessage
+            );
+          }
+        );
+        window.location.reload();
       };
     },
   ]);

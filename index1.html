@@ -94,16 +94,20 @@
           </td>
         </tr>
       </tbody>
-    </table>
-    <div>
       <div>
-        <p>Update element in array</p>
-        <input
-          type="button"
-          value="Actualizar alerta"
-          ng-click="updating()"
-        />
+        <div>
+          <input
+            type="button"
+            value="Actualizar alerta"
+            ng-click="updating(LastServiceAlert.Stamp.TimeModified,
+            LastServiceAlert.FollowUpUser,
+            LastServiceAlert.Description,
+            LastServiceAlert.Title,
+            LastServiceAlert.ServiceAlertStatus['@DisplayString']
+            )"
+          />
+        </div>
       </div>
-    </div>
+    </table>
   </div>
 </div>
