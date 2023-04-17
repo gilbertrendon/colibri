@@ -118,11 +118,12 @@ define(["modules/platform/platformModule"], function () {
           $scope.ServiceAlertKeys = ServiceAlertData;
 
           if ($scope.ServiceAlertKeys !== null) {
-            for (var j = 0; j < $scope.ServiceAlertKeys.length; j++) {
-              $scope.arreglo.push($scope.ServiceAlertKeys[j]["Title"]);
-            }
+            // for (var j = 0; j < $scope.ServiceAlertKeys.length-2; j++) {
+            //   $scope.arreglo.push($scope.ServiceAlertKeys[j]["Title"]);
+            // }
             $scope.LastServiceAlert =
               $scope.ServiceAlertKeys[$scope.ServiceAlertKeys.length - 1];
+            $scope.ServiceAlertKeys.pop();
             console.log("*********************************************");
             console.log($scope.LastServiceAlert);
             LastServiceAlert = $scope.LastServiceAlert;
@@ -139,8 +140,7 @@ define(["modules/platform/platformModule"], function () {
         }
       );
       $scope.updating = async function (
-        UpTimeModified,
-        UserManag,
+        UserManag, //Este usuario es el que está logueado para gestionarla
         Detail,
         Coment,
         State
@@ -153,21 +153,30 @@ define(["modules/platform/platformModule"], function () {
         //   "management date:" + State
 
         // );
+        // console.log("Pending"+LastServiceAlert.ServiceAlertStatus["@DisplayString"],"Accepted"+State.Name,"Closed"+LastServiceAlert.ServiceAlertStatus["@DisplayString"]);
+        if (
+          (LastServiceAlert.ServiceAlertStatus["@DisplayString"] == "Pending" &&
+            State.Name == "Accepted") ||
+          (LastServiceAlert.ServiceAlertStatus["@DisplayString"] ==
+            "Accepted" &&
+            State.Name == "Closed")
+        ) {
+        // console.log("adfadfasdfadf");
+        const tiempoTranscurrido = Date.now();
+        const hoy = new Date(tiempoTranscurrido);
         var ServiceAlertForUpdateQuery = {};
         var nextServiceAlertKey;
         nextServiceAlertKey = LastServiceAlert["Key"];
         ServiceAlertForUpdateQuery = {
           "@objectType": "ServiceAlert",
           Key: nextServiceAlertKey,
-          Stamp: {
-            TimeModified: UpTimeModified,
-          },
+          managementDate: hoy,
           ServiceAlertStatus: {
             Name: State["Name"],
           },
           FollowUpUser: UserManag,
           Description: Detail,
-          Title: Coment,
+          FollowUpComments: Coment,
         };
 
         var resultUpdateSAStatus = w6serverServices.updateObject(
@@ -177,19 +186,20 @@ define(["modules/platform/platformModule"], function () {
         );
         await resultUpdateSAStatus.$promise.then(
           function (data) {
-            alert(
-              "Se actualizo el estado del service alert " +
-              data
-            );
+            alert("Se actualizo el estado del service alert " + data);
           },
           function (error) {
-            alert(
-              "Failed to update object. Error information: " +
-                error.data.ExceptionMessage
-            );
+            // alert(
+            //   "Failed to update object. Error information: " +
+            //     error.data.ExceptionMessage
+            // );
           }
         );
         window.location.reload();
+        }else{
+          alert("Transicion de estados no permitida")
+          window.location.reload();
+        }
       };
     },
   ]);

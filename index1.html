@@ -14,7 +14,7 @@
           <th>Management date</th>
           <th>Alert tipe</th>
           <th>Managed by</th>
-          <th>Detail</th>
+          <th>Description</th>
           <th>Comentarios</th>
           <th>Estado</th>
         </tr>
@@ -22,11 +22,11 @@
       <tbody>
         <tr ng-repeat="alert in ServiceAlertKeys">
           <td>{{alert.Stamp.TimeCreated}}</td>
-          <td>{{alert.Stamp.TimeModified}}</td>
-          <td>{{alert.ServiceAlertType['@DisplayString']}}</td>
+          <td>{{alert.managementDate}}</td>
+          <td>{{alert.Title}}</td>
           <td>{{alert.FollowUpUser}}</td>
           <td>{{alert.Description}}</td>
-          <td>{{alert.Title}}</td>
+          <td>{{alert.FollowUpComments}}</td>
           <td>{{alert.ServiceAlertStatus['@DisplayString']}}</td>
         </tr>
         <tr>
@@ -35,7 +35,7 @@
             <pp-datetime
               show-date="true"
               show-time="true"
-              ng-model="LastServiceAlert.Stamp.TimeModified"
+              ng-model="LastServiceAlert.managementDate"
               property-name="FinishDate"
               focus-id="1"
               read-only="false"
@@ -43,18 +43,9 @@
               default-value=""
             ></pp-datetime>
           </td>
-          <td>{{LastServiceAlert.ServiceAlertType['@DisplayString']}}</td>
-          <td>
-            <textarea
-              rows="1"
-              cols="20"
-              name="comment"
-              ng-model="LastServiceAlert.FollowUpUser"
-            >
-          {{LastServiceAlert.FollowUpUser}}</textarea
-            >
-          </td>
-          <td>
+          <td>{{LastServiceAlert.Title}}</td>
+          <td>{{LastServiceAlert.FollowUpUser}}</td>
+          <td hidden>
             <br />
             <select
               ng-model="LastServiceAlert.Description"
@@ -76,38 +67,31 @@
             </select>
             <br />
           </td>
+          <td>{{LastServiceAlert.Description}}</td>
           <td>
             <textarea
               rows="4"
               cols="30"
               name="comment"
-              ng-model="LastServiceAlert.Title"
+              ng-model="LastServiceAlert.FollowUpComments"
             >
-          {{LastServiceAlert.Title}}</textarea
+          {{LastServiceAlert.FollowUpComments}}</textarea
             >
           </td>
           <td>
+            {{LastServiceAlert.ServiceAlertStatus['@DisplayString']}}
             <select
+              ng-change="updating(LastServiceAlert.FollowUpUser,
+            LastServiceAlert.Description,
+            LastServiceAlert.FollowUpComments,
+            LastServiceAlert.ServiceAlertStatus['@DisplayString']
+            )"
               ng-model="LastServiceAlert.ServiceAlertStatus['@DisplayString']"
               ng-options="opcion.Name for opcion in Opciones"
             ></select>
           </td>
         </tr>
       </tbody>
-      <div>
-        <div>
-          <input
-            type="button"
-            value="Actualizar alerta"
-            ng-click="updating(LastServiceAlert.Stamp.TimeModified,
-            LastServiceAlert.FollowUpUser,
-            LastServiceAlert.Description,
-            LastServiceAlert.Title,
-            LastServiceAlert.ServiceAlertStatus['@DisplayString']
-            )"
-          />
-        </div>
-      </div>
     </table>
   </div>
 </div>
