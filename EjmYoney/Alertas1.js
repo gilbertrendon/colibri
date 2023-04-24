@@ -1,18 +1,6 @@
 define(["modules/platform/platformModule"], function () {
-  var todos = [];
-  var Opciones = [];
   var LastServiceAlert = [];
   var data = {};
-  var ServiceAlertKeys = [];
-  var mensaje = "";
-  var showLocationsCombo = true;
-  var textoUno = "";
-  var rreglo = [];
-  var items1_1 = [{ a: "bien" }, { b: "mal" }];
-  var items1_2 = [{ c: "bien" }, { d: "mal" }];
-  var items1 = [{ a: "bien" }, { b: "mal" }];
-  var TaskKey = "";
-  var TaskCallID = "";
   var serviceAlerts = {
     TaskCallID: "",
     TaskKey: "",
@@ -25,6 +13,7 @@ define(["modules/platform/platformModule"], function () {
     "$window",
 
     async function ($scope, w6serverServices, $window) {
+      $scope.actualAction = "";
       $scope.todos = [
         {
           id: 1,
@@ -60,18 +49,6 @@ define(["modules/platform/platformModule"], function () {
 
       $scope.Opciones = [
         {
-          Key: 1199446016,
-          Name: "New",
-        },
-        {
-          Key: 1199446017,
-          Name: "Acknowledge",
-        },
-        {
-          Key: 1199446018,
-          Name: "Not Relevant",
-        },
-        {
           Key: 857653251,
           Name: "Pending",
         },
@@ -82,6 +59,16 @@ define(["modules/platform/platformModule"], function () {
         {
           Key: 857653253,
           Name: "Closed",
+        },
+      ];
+      $scope.Acciones = [
+        {
+          Key: 989003776,
+          Name: "Llamar al proveedor",
+        },
+        {
+          Key: 989011968,
+          Name: "Llamar al cliente",
         },
       ];
       $scope.LastServiceAlert = [];
@@ -116,20 +103,15 @@ define(["modules/platform/platformModule"], function () {
         function (ServiceAlertData) {
           data = ServiceAlertData;
           $scope.ServiceAlertKeys = ServiceAlertData;
-
           if ($scope.ServiceAlertKeys !== null) {
-            // for (var j = 0; j < $scope.ServiceAlertKeys.length-2; j++) {
-            //   $scope.arreglo.push($scope.ServiceAlertKeys[j]["Title"]);
-            // }
             $scope.LastServiceAlert =
               $scope.ServiceAlertKeys[$scope.ServiceAlertKeys.length - 1];
             $scope.ServiceAlertKeys.pop();
-            console.log("*********************************************");
-            console.log($scope.LastServiceAlert);
             LastServiceAlert = $scope.LastServiceAlert;
-            // data.ServiceAlert =
-            //   LastServiceAlert[$scope.ServiceAlertKeys.length - 1]["Title"];
+            $scope.selectedState = $scope.LastServiceAlert.ServiceAlertStatus;
           }
+          $scope.actualAction =
+            LastServiceAlert.FollowUpAction["@DisplayString"];
         },
         function (error) {
           alert(
@@ -143,17 +125,10 @@ define(["modules/platform/platformModule"], function () {
         UserManag, //Este usuario es el que está logueado para gestionarla
         Detail,
         Coment,
-        State
+        State,
+        actionName,
+        actionKey
       ) {
-        // alert(
-        //   "management date:" + UpTimeModified+
-        //   "management date:" + UserManag+
-        //   "management date:" + Detail+
-        //   "management date:" + Coment+
-        //   "management date:" + State
-
-        // );
-        // console.log("Pending"+LastServiceAlert.ServiceAlertStatus["@DisplayString"],"Accepted"+State.Name,"Closed"+LastServiceAlert.ServiceAlertStatus["@DisplayString"]);
         if (
           (LastServiceAlert.ServiceAlertStatus["@DisplayString"] == "Pending" &&
             State.Name == "Accepted") ||
@@ -161,43 +136,44 @@ define(["modules/platform/platformModule"], function () {
             "Accepted" &&
             State.Name == "Closed")
         ) {
-        // console.log("adfadfasdfadf");
-        const tiempoTranscurrido = Date.now();
-        const hoy = new Date(tiempoTranscurrido);
-        var ServiceAlertForUpdateQuery = {};
-        var nextServiceAlertKey;
-        nextServiceAlertKey = LastServiceAlert["Key"];
-        ServiceAlertForUpdateQuery = {
-          "@objectType": "ServiceAlert",
-          Key: nextServiceAlertKey,
-          managementDate: hoy,
-          ServiceAlertStatus: {
-            Name: State["Name"],
-          },
-          FollowUpUser: UserManag,
-          Description: Detail,
-          FollowUpComments: Coment,
-        };
+          const tiempoTranscurrido = Date.now();
+          const hoy = new Date(tiempoTranscurrido);
+          var ServiceAlertForUpdateQuery = {};
+          var nextServiceAlertKey;
+          nextServiceAlertKey = LastServiceAlert["Key"];
+          ServiceAlertForUpdateQuery = {
+            "@objectType": "ServiceAlert",
+            Key: nextServiceAlertKey,
+            managementDate: hoy,
+            ServiceAlertStatus: {
+              Name: State["Name"],
+              Key: State["Key"],
+            },
+            FollowUpUser: UserManag,
+            Description: Detail,
+            FollowUpComments: Coment,
+            FollowUpAction: {
+              Name: actionName,
+              Key: actionKey,
+            },
+          };
 
-        var resultUpdateSAStatus = w6serverServices.updateObject(
-          "ServiceAlert",
-          ServiceAlertForUpdateQuery,
-          false
-        );
-        await resultUpdateSAStatus.$promise.then(
-          function (data) {
-            alert("Se actualizo el estado del service alert " + data);
-          },
-          function (error) {
-            // alert(
-            //   "Failed to update object. Error information: " +
-            //     error.data.ExceptionMessage
-            // );
-          }
-        );
-        window.location.reload();
-        }else{
-          alert("Transicion de estados no permitida")
+          var resultUpdateSAStatus = w6serverServices.updateObject(
+            "ServiceAlert",
+            ServiceAlertForUpdateQuery,
+            false
+          );
+          await resultUpdateSAStatus.$promise.then(
+            function (data) {
+              alert("Se actualizo el estado del service alert " + data);
+            },
+            function (error) {
+              // error No se pone porque ya hay una alerta activa para este error
+            }
+          );
+          window.location.reload();
+        } else {
+          alert("Transicion de estados no permitida");
           window.location.reload();
         }
       };

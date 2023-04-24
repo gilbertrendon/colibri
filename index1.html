@@ -14,9 +14,10 @@
           <th>Management date</th>
           <th>Alert tipe</th>
           <th>Managed by</th>
+          <th>Action</th>
           <th>Description</th>
-          <th>Comentarios</th>
-          <th>Estado</th>
+          <th>Comment</th>
+          <th>State</th>
         </tr>
       </thead>
       <tbody>
@@ -25,26 +26,25 @@
           <td>{{alert.managementDate}}</td>
           <td>{{alert.Title}}</td>
           <td>{{alert.FollowUpUser}}</td>
+          <td>{{alert.FollowUpAction.Name}}</td>
           <td>{{alert.Description}}</td>
           <td>{{alert.FollowUpComments}}</td>
           <td>{{alert.ServiceAlertStatus['@DisplayString']}}</td>
         </tr>
         <tr>
           <td>{{LastServiceAlert.Stamp.TimeCreated}}</td>
-          <td>
-            <pp-datetime
-              show-date="true"
-              show-time="true"
-              ng-model="LastServiceAlert.managementDate"
-              property-name="FinishDate"
-              focus-id="1"
-              read-only="false"
-              mandatory="false"
-              default-value=""
-            ></pp-datetime>
-          </td>
+          <td>{{LastServiceAlert.managementDate}}</td>
           <td>{{LastServiceAlert.Title}}</td>
           <td>{{LastServiceAlert.FollowUpUser}}</td>
+          <td>
+            &Uacute;ltima acci&oacute;n ejecutada:
+            <br />
+            {{actualAction}}
+            <select
+              ng-model="LastServiceAlert.FollowUpAction['@DisplayString']"
+              ng-options="accion.Name for accion in Acciones"
+            ></select>
+          </td>
           <td hidden>
             <br />
             <select
@@ -84,7 +84,9 @@
               ng-change="updating(LastServiceAlert.FollowUpUser,
             LastServiceAlert.Description,
             LastServiceAlert.FollowUpComments,
-            LastServiceAlert.ServiceAlertStatus['@DisplayString']
+            LastServiceAlert.ServiceAlertStatus['@DisplayString'],
+            LastServiceAlert.FollowUpAction['@DisplayString'].Name,
+            LastServiceAlert.FollowUpAction['@DisplayString'].Key
             )"
               ng-model="LastServiceAlert.ServiceAlertStatus['@DisplayString']"
               ng-options="opcion.Name for opcion in Opciones"
