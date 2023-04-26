@@ -88,7 +88,7 @@ define(["modules/platform/platformModule"], function () {
         TasKNumber: "",
       };
 
-      $scope.init = function () {};
+      $scope.init = function () { };
       TaskCallID = $scope.formInfo.object.CallID;
       TaskKey = $scope.formInfo.object.Key;
       var ServiceAlertQuery = {
@@ -112,11 +112,28 @@ define(["modules/platform/platformModule"], function () {
           }
           $scope.actualAction =
             LastServiceAlert.FollowUpAction["@DisplayString"];
+          if (LastServiceAlert.ServiceAlertStatus['@DisplayString'] == "Pending"){
+            $scope.Opciones = [
+              {
+                Key: 857653252,
+                Name: "Accepted",
+              },
+            ];
+          } else if (LastServiceAlert.ServiceAlertStatus['@DisplayString'] == "Accepted"){
+            $scope.Opciones = [
+              {
+                Key: 857653253,
+                Name: "Closed",
+              },
+            ];
+          }else {
+            $scope.Opciones = [];
+          }
         },
         function (error) {
           alert(
             "Failed to update Service Alert object. Error information: " +
-              error.ServiceAlertData.ExceptionMessage
+            error.ServiceAlertData.ExceptionMessage
           );
           return error;
         }
