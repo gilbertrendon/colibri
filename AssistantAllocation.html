@@ -1,0 +1,65 @@
+<div ng-controller="AssistantAllocationController" class="ng-scope k-grid k-reorderable"
+    style="width: 750px;margin-top: 0px;">
+    <label class="propPanelLabel">Personas: </label>
+    <!-- <div>
+        <i class="fa fa-plus"
+            style="text-align: right; margin-left: 700px; color: #1174be; cursor: pointer; font-weight: bold;"
+            ng-click="addPersonas()">
+            <b style="color: #1174be;cursor: pointer;font-family: 'Roboto', 'Helvetica', 'Segoe UI', 'sans-serif';">
+                Add</b>
+        </i>
+    </div> -->
+    <div class="k-grid-header" style="padding-right: 0px; margin-top: 20px;">
+        <div class="k-grid-header-wrap k-auto-scrollable headerGrid">
+            <table role="grid">
+                <colgroup>
+                    <col style="width:50px">
+                    <col style="width:200px">
+                    <col style="width:150px">
+                    <col style="width:150px">
+                    <col style="width:150px">
+                </colgroup>
+                <thead role="rowgroup">
+                    <tr role="row" class="gridEditRemoveColumn">
+                        <th role="columnheader" class="k-header emptyColumn" style="border-left: 1px solid #cbcbcb;">
+                            <span></span></th>
+                        <th role="columnheader" class="k-header columnNombre" style="border-left: 1px solid #1174be;">
+                            <span>Nombre</span></th>
+                        <th role="columnheader" class="k-header columnheadergrid">
+                            <span>Cedula</span></th>
+                        <th role="columnheader" class="k-header columnheadergrid">
+                            <span>Inicio</span></th>
+                        <th role="columnheader" class="k-header columnheadergrid">
+                            <span>Fin</span></th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <div class="k-grid-content k-auto-scrollable tableGrid">
+        <table role="grid">
+            <colgroup>
+                <col style="width:50px">
+                <col style="width:200px">
+                <col style="width:150px">
+                <col style="width:150px">
+                <col style="width:150px">
+            </colgroup>
+            <tbody role="rowgroup">
+                <tr role="row" ng-repeat="a in allocations">
+                    <td role="gridcell">
+                        <div>
+                            <i class="fa fa-edit ng-scope" ng-click="editPersonas($index)" style="padding-left: 8px;"></i>
+                        </div>
+    </div>
+    </td>
+    <td role="gridcell" class="gridCellLeft">{{a.RefObject.Name}}</td>
+    <td role="gridcell" class="gridCellRight">{{a.RefObject.ID}}</td>
+    <td role="gridcell" class="gridCellLeft">{{a.StartTime | date:"dd/MM/yyyy HH:mm"}}</td>
+    <td role="gridcell" class="gridCellRight">{{a.FinishTime | date:"dd/MM/yyyy HH:mm"}}
+    </td>
+    </tr>
+    </tbody>
+    </table>
+</div>
+</div>

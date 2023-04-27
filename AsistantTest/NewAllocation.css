@@ -1,0 +1,36 @@
+.angular-google-map-container {
+  height: 550px;
+  top:30px;
+  right:30px;
+}
+.columnheadergrid{
+  padding-left: 10px; 
+  border-top: 1px #cbcbcb;
+}
+.gridCellLeft{
+  border-left: 1px #cbcbcb;
+}
+.gridCellRight{
+  border-right: 1px #cbcbcb;
+}
+.emptyColumn{
+  padding-left: 10px; 
+  border-top: 1px #cbcbcb; 
+  border-left: 1px solid #cbcbcb;
+}
+.columnNombre{
+  border-right: 1px #1174be; 
+  border-left: 1px solid #1174be; 
+  border-top: 1px #cbcbcb;
+}
+.tableGrid
+{
+  height: 207px;
+  border-bottom: 1px solid #cbcbcb ;
+  border-right: 1px solid #cbcbcb ;
+  border-left: 1px solid #cbcbcb;
+}
+.headerGrid{
+  outline-style: auto;
+  outline-color: #cbcbcb;
+}

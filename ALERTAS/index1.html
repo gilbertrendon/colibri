@@ -10,20 +10,22 @@
     <table class="table">
       <thead>
         <tr>
-          <th>Creation date</th>
-          <th>Management date</th>
-          <th>Alert tipe</th>
-          <th>Managed by</th>
-          <th>Action</th>
-          <th>Description</th>
-          <th>Comment</th>
-          <th>State</th>
+          <th>Fecha de creaci&oacute;n</th>
+          <th>Fecha de aceptaci&oacute;n</th>
+          <th>Fecha de cierre</th>
+          <th>Tipo de alerta</th>
+          <th>Gestionada por:</th>
+          <th>Acci&oacute;n</th>
+          <th>Descripci&oacute;n</th>
+          <th>Comentarios</th>
+          <th>Estado</th>
         </tr>
       </thead>
       <tbody>
         <tr ng-repeat="alert in ServiceAlertKeys">
           <td>{{alert.Stamp.TimeCreated}}</td>
           <td>{{alert.managementDate}}</td>
+          <td>{{alert.closeAlert}}</td>
           <td>{{alert.Title}}</td>
           <td>{{alert.FollowUpUser}}</td>
           <td>{{alert.FollowUpAction.Name}}</td>
@@ -34,22 +36,19 @@
         <tr>
           <td>{{LastServiceAlert.Stamp.TimeCreated}}</td>
           <td>{{LastServiceAlert.managementDate}}</td>
+          <td>{{alert.closeAlert}}</td>
           <td>{{LastServiceAlert.Title}}</td>
           <td>{{LastServiceAlert.FollowUpUser}}</td>
           <td>
             &Uacute;ltima acci&oacute;n ejecutada:
             <br />
             {{actualAction}}
-            <select
-              ng-model="LastServiceAlert.FollowUpAction['@DisplayString']"
-              ng-options="accion.Name for accion in Acciones"
-            ></select>
+            <select ng-model="LastServiceAlert.FollowUpAction['@DisplayString']"
+              ng-options="accion.Name for accion in Acciones"></select>
           </td>
           <td hidden>
             <br />
-            <select
-              ng-model="LastServiceAlert.Description"
-              style="
+            <select ng-model="LastServiceAlert.Description" style="
                 border: 1px solid #cbcbcb;
                 border-radius: 2px;
                 min-height: 38px;
@@ -59,9 +58,7 @@
                 color: #222222;
                 width: 160px;
                 padding: 4px 10px;
-              "
-              class="form-control"
-            >
+              " class="form-control">
               <option>Novedad Gestionada</option>
               <option>Novedad no requiere gestion</option>
             </select>
@@ -69,28 +66,19 @@
           </td>
           <td>{{LastServiceAlert.Description}}</td>
           <td>
-            <textarea
-              rows="4"
-              cols="30"
-              name="comment"
-              ng-model="LastServiceAlert.FollowUpComments"
-            >
-          {{LastServiceAlert.FollowUpComments}}</textarea
-            >
+            <textarea rows="4" cols="30" name="comment" ng-model="LastServiceAlert.FollowUpComments">
+          {{LastServiceAlert.FollowUpComments}}</textarea>
           </td>
           <td>
             {{LastServiceAlert.ServiceAlertStatus['@DisplayString']}}
-            <select
-              ng-change="updating(LastServiceAlert.FollowUpUser,
+            <select ng-change="updating(LastServiceAlert.FollowUpUser,
             LastServiceAlert.Description,
             LastServiceAlert.FollowUpComments,
             LastServiceAlert.ServiceAlertStatus['@DisplayString'],
             LastServiceAlert.FollowUpAction['@DisplayString'].Name,
             LastServiceAlert.FollowUpAction['@DisplayString'].Key
-            )"
-              ng-model="LastServiceAlert.ServiceAlertStatus['@DisplayString']"
-              ng-options="opcion.Name for opcion in Opciones"
-            ></select>
+            )" ng-model="LastServiceAlert.ServiceAlertStatus['@DisplayString']"
+              ng-options="opcion.Name for opcion in Opciones"></select>
           </td>
         </tr>
       </tbody>
