@@ -89,7 +89,7 @@ define(["modules/platform/platformModule"], function () {
         TasKNumber: "",
       };
 
-      $scope.init = function () { };
+      $scope.init = function () {};
       TaskCallID = $scope.formInfo.object.CallID;
       TaskKey = $scope.formInfo.object.Key;
       var ServiceAlertQuery = {
@@ -113,14 +113,18 @@ define(["modules/platform/platformModule"], function () {
           }
           $scope.actualAction =
             LastServiceAlert.FollowUpAction["@DisplayString"];
-          if (LastServiceAlert.ServiceAlertStatus['@DisplayString'] == "Pending") {
+          if (
+            LastServiceAlert.ServiceAlertStatus["@DisplayString"] == "Pending"
+          ) {
             $scope.Opciones = [
               {
                 Key: 857653252,
                 Name: "Accepted",
               },
             ];
-          } else if (LastServiceAlert.ServiceAlertStatus['@DisplayString'] == "Accepted") {
+          } else if (
+            LastServiceAlert.ServiceAlertStatus["@DisplayString"] == "Accepted"
+          ) {
             $scope.Opciones = [
               {
                 Key: 857653253,
@@ -130,11 +134,13 @@ define(["modules/platform/platformModule"], function () {
           } else {
             $scope.Opciones = [];
           }
+          console.log("********************************************");
+          console.log(LastServiceAlert);
         },
         function (error) {
           alert(
             "Failed to update Service Alert object. Error information: " +
-            error.ServiceAlertData.ExceptionMessage
+              error.ServiceAlertData.ExceptionMessage
           );
           return error;
         }
@@ -154,18 +160,51 @@ define(["modules/platform/platformModule"], function () {
             "Accepted" &&
             State.Name == "Closed")
         ) {
-          const tiempoTranscurrido = Date.now();
-          const hoy = new Date(tiempoTranscurrido);
+          //18000000 son 5 horas en milisegundos
+          const numberOfMlSeconds = new Date(Date.now()).getTime();
+          var newDateObj = new Date(numberOfMlSeconds - 18000000);
+          const hoyy = new Date(newDateObj);
+          const hoy = new Date(hoyy);
+
+          // const tiempoTranscurrido = Date.now();
+          // const hoy = new Date(tiempoTranscurrido);
+
+          //Para la diferencia entre las dos fechas para obtener el resultado en minutos:
+          var fechaInicioo = LastServiceAlert.Stamp.TimeCreated;
+          var fechaAcceptedd = LastServiceAlert.managementDate;
+
+          var fechaFinn = hoy;
+
+          var fechaInicio = new Date(fechaInicioo).getTime();
+          //Para obtener la fecha de aceptado menos lo que se debe restar para que se coordine el tiempo global
+          const numberOfMlSecondss = new Date(fechaAcceptedd).getTime();
+          var newDateObjj = new Date(numberOfMlSecondss - 18000000);
+          var hoyacc = new Date(newDateObjj);
+          var hoyac = new Date(hoyacc);
+          
+
+          var fechaAccepted = new Date(hoyac).getTime();
+          var fechaFin = new Date(fechaFinn).getTime();
+          var diff = fechaFin - fechaInicio;
+          var diff2 = fechaFin - fechaAccepted;
+          
+       
           var ServiceAlertForUpdateQuery = {};
           var nextServiceAlertKey;
           nextServiceAlertKey = LastServiceAlert["Key"];
-          //if estado = aceptado entonces se hace lo siguiente:
-          if (LastServiceAlert.ServiceAlertStatus["@DisplayString"] == "Pending" &&
-            State.Name == "Accepted") {
+          if (
+            LastServiceAlert.ServiceAlertStatus["@DisplayString"] ==
+              "Pending" &&
+            State.Name == "Accepted"
+          ) {
+            // console.log(
+            //   "*" + fechaInicio + "*" + fechaFin + "*" + Math.trunc(diff)
+            // );
             ServiceAlertForUpdateQuery = {
               "@objectType": "ServiceAlert",
               Key: nextServiceAlertKey,
               managementDate: hoy,
+              notManageTime: Math.trunc(diff / (60 * 1000)), //Estos son los minutos que han pasado sin aceptar la alerta
               ServiceAlertStatus: {
                 Name: State["Name"],
                 Key: State["Key"],
@@ -178,13 +217,20 @@ define(["modules/platform/platformModule"], function () {
                 Key: actionKey,
               },
             };
-          } else if (LastServiceAlert.ServiceAlertStatus["@DisplayString"] ==
-            "Accepted" &&
-            State.Name == "Closed") {
+          } else if (
+            LastServiceAlert.ServiceAlertStatus["@DisplayString"] ==
+              "Accepted" &&
+            State.Name == "Closed"
+          ) {
+      
+            // console.log(
+            //   "*" + fechaInicio + "*" + fechaFin + "*" + Math.trunc(diff2)
+            // );
             ServiceAlertForUpdateQuery = {
               "@objectType": "ServiceAlert",
               Key: nextServiceAlertKey,
               closeAlert: hoy,
+              manageTime: Math.trunc(diff2 / (60 * 1000)),//Estos son los minutos de gestión de la alerta
               ServiceAlertStatus: {
                 Name: State["Name"],
                 Key: State["Key"],
@@ -200,9 +246,6 @@ define(["modules/platform/platformModule"], function () {
           }
           //de lo contrario se hace lo siguiente
 
-
-
-
           var resultUpdateSAStatus = w6serverServices.updateObject(
             "ServiceAlert",
             ServiceAlertForUpdateQuery,
@@ -214,6 +257,7 @@ define(["modules/platform/platformModule"], function () {
             },
             function (error) {
               // error No se pone porque ya hay una alerta activa para este error
+              alert(error);
             }
           );
           window.location.reload();

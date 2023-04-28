@@ -13,6 +13,8 @@
           <th>Fecha de creaci&oacute;n</th>
           <th>Fecha de aceptaci&oacute;n</th>
           <th>Fecha de cierre</th>
+          <th>Tiempo no gestionada(min)</th>
+          <th>Tiempo gestionada(min)</th>
           <th>Tipo de alerta</th>
           <th>Gestionada por:</th>
           <th>Acci&oacute;n</th>
@@ -26,6 +28,8 @@
           <td>{{alert.Stamp.TimeCreated}}</td>
           <td>{{alert.managementDate}}</td>
           <td>{{alert.closeAlert}}</td>
+          <td>{{alert.notManageTime}}</td>
+          <td>{{alert.manageTime}}</td>
           <td>{{alert.Title}}</td>
           <td>{{alert.FollowUpUser}}</td>
           <td>{{alert.FollowUpAction.Name}}</td>
@@ -36,7 +40,9 @@
         <tr>
           <td>{{LastServiceAlert.Stamp.TimeCreated}}</td>
           <td>{{LastServiceAlert.managementDate}}</td>
-          <td>{{alert.closeAlert}}</td>
+          <td>{{LastServiceAlert.closeAlert}}</td>
+          <td>{{LastServiceAlert.notManageTime}}</td>
+          <td>{{LastServiceAlert.manageTime}}</td>
           <td>{{LastServiceAlert.Title}}</td>
           <td>{{LastServiceAlert.FollowUpUser}}</td>
           <td>
