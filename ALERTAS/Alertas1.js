@@ -103,11 +103,14 @@ define(["modules/platform/platformModule"], function () {
       await reqServiceAlerts.$promise.then(
         function (ServiceAlertData) {
           data = ServiceAlertData;
+
           $scope.ServiceAlertKeys = ServiceAlertData;
+
           if ($scope.ServiceAlertKeys !== null) {
             $scope.LastServiceAlert =
               $scope.ServiceAlertKeys[$scope.ServiceAlertKeys.length - 1];
             $scope.ServiceAlertKeys.pop();
+
             LastServiceAlert = $scope.LastServiceAlert;
             $scope.selectedState = $scope.LastServiceAlert.ServiceAlertStatus;
           }
@@ -134,8 +137,6 @@ define(["modules/platform/platformModule"], function () {
           } else {
             $scope.Opciones = [];
           }
-          console.log("********************************************");
-          console.log(LastServiceAlert);
         },
         function (error) {
           alert(
@@ -147,7 +148,6 @@ define(["modules/platform/platformModule"], function () {
       );
       $scope.updating = async function (
         UserManag, //Este usuario es el que está logueado para gestionarla
-        Detail,
         Coment,
         State,
         actionName,
@@ -181,14 +181,12 @@ define(["modules/platform/platformModule"], function () {
           var newDateObjj = new Date(numberOfMlSecondss - 18000000);
           var hoyacc = new Date(newDateObjj);
           var hoyac = new Date(hoyacc);
-          
 
           var fechaAccepted = new Date(hoyac).getTime();
           var fechaFin = new Date(fechaFinn).getTime();
           var diff = fechaFin - fechaInicio;
           var diff2 = fechaFin - fechaAccepted;
-          
-       
+
           var ServiceAlertForUpdateQuery = {};
           var nextServiceAlertKey;
           nextServiceAlertKey = LastServiceAlert["Key"];
@@ -197,52 +195,97 @@ define(["modules/platform/platformModule"], function () {
               "Pending" &&
             State.Name == "Accepted"
           ) {
-            // console.log(
-            //   "*" + fechaInicio + "*" + fechaFin + "*" + Math.trunc(diff)
-            // );
-            ServiceAlertForUpdateQuery = {
-              "@objectType": "ServiceAlert",
-              Key: nextServiceAlertKey,
-              managementDate: hoy,
-              notManageTime: Math.trunc(diff / (60 * 1000)), //Estos son los minutos que han pasado sin aceptar la alerta
-              ServiceAlertStatus: {
-                Name: State["Name"],
-                Key: State["Key"],
-              },
-              FollowUpUser: UserManag,
-              Description: Detail,
-              FollowUpComments: Coment,
-              FollowUpAction: {
-                Name: actionName,
-                Key: actionKey,
-              },
-            };
+            
+            if (actionName == "Llamar al proveedor" || actionName == "Llamar al cliente") {
+              ServiceAlertForUpdateQuery = {
+                "@objectType": "ServiceAlert",
+                Key: nextServiceAlertKey,
+                managementDate: hoy,
+                notManageTime: Math.trunc(diff / (60 * 1000)), //Estos son los minutos que han pasado sin aceptar la alerta
+                ServiceAlertStatus: {
+                  Name: State["Name"],
+                  Key: State["Key"],
+                },
+                FollowUpUser: UserManag,
+                FollowUpComments: Coment,
+                FollowUpAction: {
+                  Name: actionName,
+                  Key: actionKey,
+                },
+              };
+            } else {
+              ServiceAlertForUpdateQuery = {
+                "@objectType": "ServiceAlert",
+                Key: nextServiceAlertKey,
+                managementDate: hoy,
+                notManageTime: Math.trunc(diff / (60 * 1000)), //Estos son los minutos que han pasado sin aceptar la alerta
+                ServiceAlertStatus: {
+                  Name: State["Name"],
+                  Key: State["Key"],
+                },
+                FollowUpUser: UserManag,
+                FollowUpComments: Coment,
+              };
+            }
           } else if (
             LastServiceAlert.ServiceAlertStatus["@DisplayString"] ==
               "Accepted" &&
             State.Name == "Closed"
           ) {
-      
-            // console.log(
-            //   "*" + fechaInicio + "*" + fechaFin + "*" + Math.trunc(diff2)
-            // );
-            ServiceAlertForUpdateQuery = {
-              "@objectType": "ServiceAlert",
-              Key: nextServiceAlertKey,
-              closeAlert: hoy,
-              manageTime: Math.trunc(diff2 / (60 * 1000)),//Estos son los minutos de gestión de la alerta
-              ServiceAlertStatus: {
-                Name: State["Name"],
-                Key: State["Key"],
-              },
-              FollowUpUser: UserManag,
-              Description: Detail,
-              FollowUpComments: Coment,
-              FollowUpAction: {
-                Name: actionName,
-                Key: actionKey,
-              },
-            };
+            if (actionName == "Llamar al proveedor" || actionName == "Llamar al cliente") {
+              ServiceAlertForUpdateQuery = {
+                "@objectType": "ServiceAlert",
+                Key: nextServiceAlertKey,
+                closeAlert: hoy,
+                manageTime: Math.trunc(diff2 / (60 * 1000)), //Estos son los minutos de gestión de la alerta
+                ServiceAlertStatus: {
+                  Name: State["Name"],
+                  Key: State["Key"],
+                },
+                FollowUpUser: UserManag,
+                FollowUpComments: Coment,
+                FollowUpAction: {
+                  Name: actionName,
+                  Key: actionKey,
+                },
+              };
+            } else {
+              ServiceAlertForUpdateQuery = {
+                "@objectType": "ServiceAlert",
+                Key: nextServiceAlertKey,
+                closeAlert: hoy,
+                manageTime: Math.trunc(diff2 / (60 * 1000)), //Estos son los minutos de gestión de la alerta
+                ServiceAlertStatus: {
+                  Name: State["Name"],
+                  Key: State["Key"],
+                },
+                FollowUpUser: UserManag,
+                FollowUpComments: Coment,
+              };
+            }
+
+            // Falta que cuando se cierre la alerta en gestión si hay alguna otra pendiente o aceptada la ponga
+            // como última recorriendo el vector desde el último al primero y la alerta que se acaba de cerrar
+            // quede de penúltimo y de último la última de las otras que esté en pendiente o aceptada "perdón si lo repetí"
+            console.log(
+              "¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨"
+            );
+            for (
+              var i = $scope.ServiceAlertKeys.length;
+              i > $scope.ServiceAlertKeys.length - 1;
+              i--
+            ) {
+              console.log("*************************************************");
+              console.log($scope.ServiceAlertKeys[i]);
+            }
+            //   if($scope.ServiceAlertKeys[i]["status"] == "pending" || $scope.ServiceAlertKeys[i]["status"] == "closed" ){
+            //TENGO QUE MANDAR UNA ORDEN QUE ME PONGA ESTA ALERTA COMO LA ULTIMA DE LA LISTA EN EL ARREGLO QUE ME DEVUELVE ESTE SERVICIO
+            //ServiceAlertFormController , w6serverServices
+            //O se puede hacer que si la última alerta está cerrada que todas las anteriores a esta(que estén pending o acepted)
+            // se pongan en estado not relevant
+            //   }
+
+            // }
           }
           //de lo contrario se hace lo siguiente
 
@@ -253,13 +296,30 @@ define(["modules/platform/platformModule"], function () {
           );
           await resultUpdateSAStatus.$promise.then(
             function (data) {
-              alert("Se actualizo el estado del service alert " + data);
+              // alert("Se actualizo el estado del service alert " + data);
             },
             function (error) {
               // error No se pone porque ya hay una alerta activa para este error
               alert(error);
             }
           );
+          // INICIO
+          // TaskKey = $scope.formInfo.object.Key;
+          // var ServiceAlertQuery = {
+          //   filter: "ReferencedTask/Key eq " + TaskKey,
+          // };
+          // var reqServiceAlerts = w6serverServices.getObjects(
+          //   "ServiceAlert",
+          //   ServiceAlertQuery,
+          //   true
+          // );
+          // await reqServiceAlerts.$promise.then(function (ServiceAlertData) {
+          //   data = ServiceAlertData;
+          //   $scope.ServiceAlertKeys = ServiceAlertData;
+          // });
+          // window.location.reload();
+          // this.Refresh();
+          // FIN
           window.location.reload();
         } else {
           alert("Transicion de estados no permitida");
