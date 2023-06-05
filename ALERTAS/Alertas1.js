@@ -57,10 +57,10 @@ define(["modules/platform/platformModule"], function () {
           Key: 857653252,
           Name: "Accepted",
         },
-        {
-          Key: 857653253,
-          Name: "Closed",
-        },
+        // {
+        //   Key: 857653253,
+        //   Name: "Closed",
+        // },
       ];
       $scope.Acciones = [
         {
@@ -115,7 +115,6 @@ define(["modules/platform/platformModule"], function () {
 
             LastServiceAlert = $scope.LastServiceAlert;
             $scope.selectedState = $scope.LastServiceAlert.ServiceAlertStatus;
-            // $scope.serviceAlerts.
           }
           $scope.actualAction =
             LastServiceAlert.FollowUpAction["@DisplayString"];
@@ -128,16 +127,8 @@ define(["modules/platform/platformModule"], function () {
                 Name: "Accepted",
               },
             ];
-          } else if (
-            LastServiceAlert.ServiceAlertStatus["@DisplayString"] == "Accepted"
-          ) {
-            $scope.Opciones = [
-              {
-                Key: 857653253,
-                Name: "Closed",
-              },
-            ];
-          } else {
+          }
+          else {
             $scope.Opciones = [];
           }
         },
@@ -149,8 +140,9 @@ define(["modules/platform/platformModule"], function () {
           return error;
         }
       );
+
       $scope.updating = async function (
-        UserManag, //Este usuario es el que está logueado para gestionarla
+        UserManag,
         Coment,
         State,
         actionName,
@@ -163,33 +155,22 @@ define(["modules/platform/platformModule"], function () {
             "Accepted" &&
             State.Name == "Closed")
         ) {
-          //18000000 son 5 horas en milisegundos
           const numberOfMlSeconds = new Date(Date.now()).getTime();
           var newDateObj = new Date(numberOfMlSeconds - 18000000);
           const hoyy = new Date(newDateObj);
           const hoy = new Date(hoyy);
-
-          // const tiempoTranscurrido = Date.now();
-          // const hoy = new Date(tiempoTranscurrido);
-
-          //Para la diferencia entre las dos fechas para obtener el resultado en minutos:
           var fechaInicioo = LastServiceAlert.Stamp.TimeCreated;
           var fechaAcceptedd = LastServiceAlert.managementDate;
-
           var fechaFinn = hoy;
-
           var fechaInicio = new Date(fechaInicioo).getTime();
-          //Para obtener la fecha de aceptado menos lo que se debe restar para que se coordine el tiempo global
           const numberOfMlSecondss = new Date(fechaAcceptedd).getTime();
           var newDateObjj = new Date(numberOfMlSecondss - 18000000);
           var hoyacc = new Date(newDateObjj);
           var hoyac = new Date(hoyacc);
-
           var fechaAccepted = new Date(hoyac).getTime();
           var fechaFin = new Date(fechaFinn).getTime();
           var diff = fechaFin - fechaInicio;
           var diff2 = fechaFin - fechaAccepted;
-
           var ServiceAlertForUpdateQuery = {};
           var nextServiceAlertKey;
           nextServiceAlertKey = LastServiceAlert["Key"];
@@ -273,7 +254,6 @@ define(["modules/platform/platformModule"], function () {
             }
           }
 
-         
           var resultUpdateSAStatus = w6serverServices.updateObject(
             "ServiceAlert",
             ServiceAlertForUpdateQuery,
@@ -281,8 +261,6 @@ define(["modules/platform/platformModule"], function () {
           );
           await resultUpdateSAStatus.$promise.then(
             async function (data) {
-              // alert("Se actualizo el estado del service alert " + data);
-
               for (var i = 0; i < $scope.ServiceAlertKeys.length; i++) {
                 if (
                   $scope.ServiceAlertKeys[i].ServiceAlertStatus[
@@ -310,6 +288,23 @@ define(["modules/platform/platformModule"], function () {
                   );
                 }
               }
+
+              var ServiceAlertQuery = {
+                filter: "Key eq " + LastServiceAlert.Key,
+              };
+
+              //INICIO2
+              var finalresult = w6serverServices.getObjects(
+                //mandar id unico
+                "ServiceAlert",
+                ServiceAlertQuery
+              );
+              await finalresult.$promise.then(async function (data) {
+                console.log("[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[");
+                console.log(data);
+                LastServiceAlert = data;
+                $scope.LastServiceAlert = LastServiceAlert[0];
+              });
             },
             function (error) {
               // error No se pone porque ya hay una alerta activa para este error
@@ -321,45 +316,6 @@ define(["modules/platform/platformModule"], function () {
           // window.location.reload();
         }
       };
-
-      //INICIO2
-      var finalresult = w6serverServices.getObjects(
-        //mandar id unico
-        "ServiceAlert",
-      );
-      await finalresult.$promise.then(
-        async function (data) {
-          console.log(data);
-        });
-
-      //FIN2
-
-
-
-
-      // INICIO para que refresque los datos
-      // var resultUpdateSAStatus = w6serverServices.updateObject(
-      //   "ServiceAlert",
-      //   ServiceAlertForUpdateQuery,
-      //   false
-      // );
-      // await resultUpdateSAStatus.$promise.then(async function (data) {
-      //   TaskKey = $scope.formInfo.object.Key;
-      //   var ServiceAlertQuery = {
-      //     filter: "ReferencedTask/Key eq " + TaskKey,
-      //   };
-      //   var reqServiceAlerts = w6serverServices.getObjects(
-      //     "ServiceAlert",
-      //     ServiceAlertQuery,
-      //     true
-      //   );
-      //   await reqServiceAlerts.$promise.then(function (ServiceAlertData) {
-      //     data = ServiceAlertData.pop();
-      //     $scope.ServiceAlertKeys = ServiceAlertData;
-      //   });
-        // FIN
-        // window.location.reload();
-      // });
     },
   ]);
 });
