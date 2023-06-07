@@ -90,7 +90,9 @@ define(["modules/platform/platformModule"], function () {
         TasKNumber: "",
       };
 
-      $scope.init = function () {};
+      $scope.init = async function () {
+      };
+
       TaskCallID = $scope.formInfo.object.CallID;
       TaskKey = $scope.formInfo.object.Key;
       $scope.CallIDg = TaskCallID;
@@ -100,7 +102,7 @@ define(["modules/platform/platformModule"], function () {
       var reqServiceAlerts = w6serverServices.getObjects(
         "ServiceAlert",
         ServiceAlertQuery,
-        true
+        false
       );
       await reqServiceAlerts.$promise.then(
         function (ServiceAlertData) {
@@ -127,8 +129,7 @@ define(["modules/platform/platformModule"], function () {
                 Name: "Accepted",
               },
             ];
-          }
-          else {
+          } else {
             $scope.Opciones = [];
           }
         },
@@ -140,6 +141,9 @@ define(["modules/platform/platformModule"], function () {
           return error;
         }
       );
+      var ServiceAlertQuery = {
+        filter: "Key eq " + LastServiceAlert.Key,
+      };
 
       $scope.updating = async function (
         UserManag,
@@ -174,6 +178,7 @@ define(["modules/platform/platformModule"], function () {
           var ServiceAlertForUpdateQuery = {};
           var nextServiceAlertKey;
           nextServiceAlertKey = LastServiceAlert["Key"];
+             $scope.LastServiceAlert.ServiceAlertStatus['@DisplayString']
           if (
             LastServiceAlert.ServiceAlertStatus["@DisplayString"] ==
               "Pending" &&
@@ -261,59 +266,54 @@ define(["modules/platform/platformModule"], function () {
           );
           await resultUpdateSAStatus.$promise.then(
             async function (data) {
-              for (var i = 0; i < $scope.ServiceAlertKeys.length; i++) {
-                if (
-                  $scope.ServiceAlertKeys[i].ServiceAlertStatus[
-                    "@DisplayString"
-                  ] != "Not Relevant"
-                ) {
-                  nextServiceAlertKey = $scope.ServiceAlertKeys[i]["Key"];
-                  ServiceAlertForUpdateQuery = {
-                    "@objectType": "ServiceAlert",
-                    Key: nextServiceAlertKey,
-                    closeAlert: hoy,
-                    manageTime: Math.trunc(diff2 / (60 * 1000)), //Estos son los minutos de gestión de la alerta
-                    ServiceAlertStatus: {
-                      Name: "Not Relevant",
-                      Key: 1199446018,
-                    },
-                    FollowUpUser: UserManag,
-                    FollowUpComments: Coment,
-                  };
-                  //Para cambiar el estado de las anterior alertas a not relevant
-                  w6serverServices.updateObject(
-                    "ServiceAlert",
-                    ServiceAlertForUpdateQuery,
-                    false
-                  );
-                }
-              }
+              // for (var i = 0; i < $scope.ServiceAlertKeys.length; i++) {
+              //   if (
+              //     $scope.ServiceAlertKeys[i].ServiceAlertStatus[
+              //       "@DisplayString"
+              //     ] != "Not Relevant"
+              //   ) {
+              //     nextServiceAlertKey = $scope.ServiceAlertKeys[i]["Key"];
+              //     ServiceAlertForUpdateQuery = {
+              //       "@objectType": "ServiceAlert",
+              //       Key: nextServiceAlertKey,
+              //       closeAlert: hoy,
+              //       manageTime: Math.trunc(diff2 / (60 * 1000)),
+              //       ServiceAlertStatus: {
+              //         Name: "Not Relevant",
+              //         Key: 1199446018,
+              //       },
+              //       FollowUpUser: UserManag,
+              //       FollowUpComments: Coment,
+              //     };
+                
+              //     w6serverServices.updateObject(
+              //       "ServiceAlert",
+              //       ServiceAlertForUpdateQuery,
+              //       false
+              //     );
+              //   }
+              // }
 
               var ServiceAlertQuery = {
                 filter: "Key eq " + LastServiceAlert.Key,
               };
-
-              //INICIO2
               var finalresult = w6serverServices.getObjects(
-                //mandar id unico
                 "ServiceAlert",
                 ServiceAlertQuery
               );
               await finalresult.$promise.then(async function (data) {
-                console.log("[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[");
-                console.log(data);
                 LastServiceAlert = data;
                 $scope.LastServiceAlert = LastServiceAlert[0];
+                $scope.actualAction =
+                  $scope.LastServiceAlert.FollowUpAction["@DisplayString"];
               });
             },
             function (error) {
-              // error No se pone porque ya hay una alerta activa para este error
               alert(error);
             }
           );
         } else {
           alert("Transicion de estados no permitida");
-          // window.location.reload();
         }
       };
     },

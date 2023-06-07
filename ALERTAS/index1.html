@@ -12,6 +12,7 @@
         <tr>
           <th>Estado</th>
           <th>Fecha de creaci&oacute;n</th>
+          <th>Fecha de gesti&oacute;n</th>
           <th>Fecha de cierre</th>
           <th>Tiempo no gestionada(min)</th>
           <th>Tiempo gestionada(min)</th>
@@ -22,9 +23,11 @@
         </tr>
       </thead>
       <tbody>
-        <tr style="color: blue" ng-repeat="alert in ServiceAlertKeys">
+        <tr style="color: #0875bf  hsl(204,92%,39%)rgb(8,117,191)
+        " ng-repeat="alert in ServiceAlertKeys">
           <td>{{alert.ServiceAlertStatus['@DisplayString']}}</td>
-          <td>{{alert.Stamp.TimeCreated}}</td>
+          <td>{{alert.CreationTime}}</td>
+          <td>{{LastServiceAlert.managementDate}}</td>
           <td>{{alert.closeAlert}}</td>
           <td>{{alert.notManageTime}}</td>
           <td>{{alert.manageTime}}</td>
@@ -33,7 +36,8 @@
           <td>{{alert.FollowUpAction.Name}}</td>
           <td>{{alert.FollowUpComments}}</td>
         </tr>
-        <tr style="color: blue">
+        <tr style="color: #0875bf  hsl(204,92%,39%)rgb(8,117,191)
+        ">
           <td>
             {{LastServiceAlert.ServiceAlertStatus['@DisplayString']}}
             <select
@@ -48,21 +52,14 @@
             ></select>
           </td>
           <td ng-model="LastServiceAlert.Stamp.TimeCreated">
-            {{LastServiceAlert.Stamp.TimeCreated}}
+            {{LastServiceAlert.CreationTime}}
           </td>
-          <!-- <td ng-model="LastServiceAlert.managementDate">{{LastServiceAlert.managementDate}}</td> -->
-          <td ng-model="LastServiceAlert.closeAlert">{{LastServiceAlert.closeAlert}}</td>
+          <td ng-model="LastServiceAlert.managementDate">{{LastServiceAlert.managementDate}}</td>
+          <td ng-model="LastServiceAlert.closeAlert">
+            {{LastServiceAlert.closeAlert}}
+          </td>
           <td ng-model="LastServiceAlert.notManageTime">
             {{LastServiceAlert.notManageTime}}
-            <textarea
-              rows="2"
-              cols="20"
-              name="nmtime"
-              ng-model="LastServiceAlert.notManageTime"
-              readonly
-            >
-          {{LastServiceAlert.notManageTime}}</textarea
-            >
           </td>
           <td ng-model="LastServiceAlert.manageTime">
             {{LastServiceAlert.manageTime}}
