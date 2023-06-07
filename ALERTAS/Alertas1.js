@@ -91,6 +91,54 @@ define(["modules/platform/platformModule"], function () {
       };
 
       $scope.init = async function () {
+        TaskCallID = $scope.formInfo.object.CallID;
+        TaskKey = $scope.formInfo.object.Key;
+        $scope.CallIDg = TaskCallID;
+        var ServiceAlertQuery = {
+          filter: "ReferencedTask/Key eq " + TaskKey,
+        };
+        var reqServiceAlerts = w6serverServices.getObjects(
+          "ServiceAlert",
+          ServiceAlertQuery,
+          false
+        );
+        await reqServiceAlerts.$promise.then(
+          function (ServiceAlertData) {
+            data = ServiceAlertData;
+
+            $scope.ServiceAlertKeys = ServiceAlertData;
+
+            if ($scope.ServiceAlertKeys !== null) {
+              $scope.LastServiceAlert =
+                $scope.ServiceAlertKeys[$scope.ServiceAlertKeys.length - 1];
+              $scope.ServiceAlertKeys.pop();
+
+              LastServiceAlert = $scope.LastServiceAlert;
+              $scope.selectedState = $scope.LastServiceAlert.ServiceAlertStatus;
+            }
+            $scope.actualAction =
+              LastServiceAlert.FollowUpAction["@DisplayString"];
+            if (
+              LastServiceAlert.ServiceAlertStatus["@DisplayString"] == "Pending"
+            ) {
+              $scope.Opciones = [
+                {
+                  Key: 857653252,
+                  Name: "Accepted",
+                },
+              ];
+            } else {
+              $scope.Opciones = [];
+            }
+          },
+          function (error) {
+            alert(
+              "Failed to update Service Alert object. Error information: " +
+                error.ServiceAlertData.ExceptionMessage
+            );
+            return error;
+          }
+        );
       };
 
       TaskCallID = $scope.formInfo.object.CallID;
@@ -141,9 +189,6 @@ define(["modules/platform/platformModule"], function () {
           return error;
         }
       );
-      var ServiceAlertQuery = {
-        filter: "Key eq " + LastServiceAlert.Key,
-      };
 
       $scope.updating = async function (
         UserManag,
@@ -152,6 +197,12 @@ define(["modules/platform/platformModule"], function () {
         actionName,
         actionKey
       ) {
+        if(State.Name == "Accepted"){
+            State.Key = 857653252;
+        }else{
+          State.Name = "Accepted";
+          State.Key = 857653252;
+        }  
         if (
           (LastServiceAlert.ServiceAlertStatus["@DisplayString"] == "Pending" &&
             State.Name == "Accepted") ||
@@ -160,10 +211,10 @@ define(["modules/platform/platformModule"], function () {
             State.Name == "Closed")
         ) {
           const numberOfMlSeconds = new Date(Date.now()).getTime();
-          var newDateObj = new Date(numberOfMlSeconds - 18000000);
+          var newDateObj = new Date(numberOfMlSeconds);
           const hoyy = new Date(newDateObj);
           const hoy = new Date(hoyy);
-          var fechaInicioo = LastServiceAlert.Stamp.TimeCreated;
+          var fechaInicioo = LastServiceAlert.CreationTime;
           var fechaAcceptedd = LastServiceAlert.managementDate;
           var fechaFinn = hoy;
           var fechaInicio = new Date(fechaInicioo).getTime();
@@ -178,7 +229,7 @@ define(["modules/platform/platformModule"], function () {
           var ServiceAlertForUpdateQuery = {};
           var nextServiceAlertKey;
           nextServiceAlertKey = LastServiceAlert["Key"];
-             $scope.LastServiceAlert.ServiceAlertStatus['@DisplayString']
+          $scope.LastServiceAlert.ServiceAlertStatus["@DisplayString"];
           if (
             LastServiceAlert.ServiceAlertStatus["@DisplayString"] ==
               "Pending" &&
@@ -285,7 +336,7 @@ define(["modules/platform/platformModule"], function () {
               //       FollowUpUser: UserManag,
               //       FollowUpComments: Coment,
               //     };
-                
+
               //     w6serverServices.updateObject(
               //       "ServiceAlert",
               //       ServiceAlertForUpdateQuery,
@@ -313,7 +364,7 @@ define(["modules/platform/platformModule"], function () {
             }
           );
         } else {
-          alert("Transicion de estados no permitida");
+          // alert("Transicion de estados no permitida");
         }
       };
     },
