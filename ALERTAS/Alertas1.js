@@ -212,8 +212,11 @@ define(["modules/platform/platformModule"], function () {
         ) {
           const numberOfMlSeconds = new Date(Date.now()).getTime();
           var newDateObj = new Date(numberOfMlSeconds);
+          var newDateObjj = new Date(numberOfMlSeconds - 18000000);
           const hoyy = new Date(newDateObj);
           const hoy = new Date(hoyy);
+          const managemethoy = new Date(newDateObjj);
+          const managementD = new Date(managemethoy);
           var fechaInicioo = LastServiceAlert.CreationTime;
           var fechaAcceptedd = LastServiceAlert.managementDate;
           var fechaFinn = hoy;
@@ -242,7 +245,7 @@ define(["modules/platform/platformModule"], function () {
               ServiceAlertForUpdateQuery = {
                 "@objectType": "ServiceAlert",
                 Key: nextServiceAlertKey,
-                managementDate: hoy,
+                managementDate: managementD,
                 notManageTime: Math.trunc(diff / (60 * 1000)), //Estos son los minutos que han pasado sin aceptar la alerta
                 ServiceAlertStatus: {
                   Name: State["Name"],
@@ -259,7 +262,7 @@ define(["modules/platform/platformModule"], function () {
               ServiceAlertForUpdateQuery = {
                 "@objectType": "ServiceAlert",
                 Key: nextServiceAlertKey,
-                managementDate: hoy,
+                managementDate: managementD,
                 notManageTime: Math.trunc(diff / (60 * 1000)), //Estos son los minutos que han pasado sin aceptar la alerta
                 ServiceAlertStatus: {
                   Name: State["Name"],
@@ -317,34 +320,6 @@ define(["modules/platform/platformModule"], function () {
           );
           await resultUpdateSAStatus.$promise.then(
             async function (data) {
-              // for (var i = 0; i < $scope.ServiceAlertKeys.length; i++) {
-              //   if (
-              //     $scope.ServiceAlertKeys[i].ServiceAlertStatus[
-              //       "@DisplayString"
-              //     ] != "Not Relevant"
-              //   ) {
-              //     nextServiceAlertKey = $scope.ServiceAlertKeys[i]["Key"];
-              //     ServiceAlertForUpdateQuery = {
-              //       "@objectType": "ServiceAlert",
-              //       Key: nextServiceAlertKey,
-              //       closeAlert: hoy,
-              //       manageTime: Math.trunc(diff2 / (60 * 1000)),
-              //       ServiceAlertStatus: {
-              //         Name: "Not Relevant",
-              //         Key: 1199446018,
-              //       },
-              //       FollowUpUser: UserManag,
-              //       FollowUpComments: Coment,
-              //     };
-
-              //     w6serverServices.updateObject(
-              //       "ServiceAlert",
-              //       ServiceAlertForUpdateQuery,
-              //       false
-              //     );
-              //   }
-              // }
-
               var ServiceAlertQuery = {
                 filter: "Key eq " + LastServiceAlert.Key,
               };
